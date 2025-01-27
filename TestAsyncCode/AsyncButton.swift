@@ -15,7 +15,7 @@ public struct AsyncButton: View {
                 Task {
                     isLoading = true
                     try await operation()
-                    isLoading = false
+//                    isLoading = false // A second problem would be how to test the fact that state is changed while operation is executed
                 }
             },
             label: {
