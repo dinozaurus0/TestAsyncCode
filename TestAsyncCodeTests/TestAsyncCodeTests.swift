@@ -1,12 +1,14 @@
 import XCTest
 import TestAsyncCode
 import ViewInspector
+import SwiftUI
 
 final class TestAsyncCodeTests: XCTestCase {
-    func test_whenButtonIsTapped_shouldDisableButton() {
+    func test_whenButtonIsTapped_shouldDisableButton() throws {
         // Arrange
         var sut = AsyncButton(operation: {})
-        var isLoading: Bool = false
+        var isLoading = try sut.findButton().isDisabled()
+        XCTAssertFalse(isLoading, "precondition")
 
         // Act
         load(&sut) { view in
@@ -25,5 +27,11 @@ final class TestAsyncCodeTests: XCTestCase {
         let expectation = sut.on(\.viewInspectHook, perform: using)
         ViewHosting.host(view: sut)
         wait(for: [expectation], timeout: 0.01)
+    }
+}
+
+extension View {
+    func findButton() throws -> InspectableView<ViewType.Button> {
+        try inspect().find(ViewType.Button.self)
     }
 }
